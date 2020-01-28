@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">名称：</label>
+								<div class="col-sm-8">
+									<input id="name" name="name" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">市场：</label>
+<!-- 								<div class="col-sm-8"> -->
+<!-- 									<input id="marketIds" name="marketIds" class="form-control" type="text"> -->
+<!-- 								</div> -->
+								
+								
+								<div class="col-sm-8">
+									<label th:each="market:${marketList}" class="checkbox-inline">
+										<input name="marketIds" type="checkbox" th:value="${market.id}"
+										th:text="${market.name}">
+									</label>
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">广告：</label>
+<!-- 								<div class="col-sm-8"> -->
+<!-- 									<input id="advertisementIds" name="advertisementIds" class="form-control" type="text"> -->
+<!-- 								</div> -->
+								
+								<div class="col-sm-8">
+									<label th:each="advertisement:${advertisementList}" class="checkbox-inline">
+										<input name="advertisementIdList" type="checkbox" th:value="${advertisement.id}"
+										th:text="${advertisement.name}">
+									</label>
+								</div>
+								
+								
+							</div>
+							
+								<div class="form-group">	
+								<label class="col-sm-3 control-label">推送开关：</label>
+								
+								<div class="col-sm-8">
+									<label class="radio-inline"> <input type="radio"
+										name="pushSwitch" value="1" checked /> 启用
+									</label> <label class="radio-inline"> <input type="radio"
+										name="pushSwitch" value="0" /> 关闭
+									</label>
+								</div>
+								
+<!-- 								<div class="col-sm-8"> -->
+<!-- 									<input id="pushSwitch" name="pushSwitch" class="form-control" type="text"> -->
+<!-- 								</div> -->
+								
+								
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">备注：</label>
+								<div class="col-sm-8">
+									<input id="remarks" name="remarks" class="form-control" type="text">
+								</div>
+							</div>
+							<!--  
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">创建时间：</label>
+								<div class="col-sm-8">
+									<input id="createTime" name="createTime" class="form-control" type="text">
+								</div>
+							</div>
+								-->													<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/ad/product/add.js">
+	</script>
+</body>
+</html>

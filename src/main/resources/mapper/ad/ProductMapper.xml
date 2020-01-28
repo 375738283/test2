@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qh.ad.dao.ProductDao">
+
+	<select id="get" resultType="com.qh.ad.domain.ProductDO">
+		select `id`,`name`,`market_ids`,`remarks`,`create_time`,push_switch from ad_product where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.qh.ad.domain.ProductDO">
+		select `id`,`name`,`market_ids`,`remarks`,`create_time`,push_switch from ad_product
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name like  '%${name}%' </if>
+		  		  <if test="marketId != null and marketId != ''"> and FIND_IN_SET(#{marketId},market_ids) </if>
+		  		  <if test="advertisementId != null and advertisementId != ''"> and id in(SELECT product_id FROM ad_product_advertisement pa WHERE pa.advertisement_id=#{advertisementId}) </if>
+		  		  <if test="partnershipId != null and partnershipId != ''">and id in(SELECT product_id FROM ad_product_advertisement pa,ad_advertisement ad WHERE pa.advertisement_id=ad.id AND ad.partnership_id=#{partnershipId}) </if>
+		  		  <if test="remarks != null and remarks != ''"> and remarks = #{remarks} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="pushSwitch != null and pushSwitch != ''"> and push_switch = #{pushSwitch} </if>
+		  		  
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ad_product
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name like  '%${name}%' </if>
+		  		  <if test="marketId != null and marketId != ''"> and FIND_IN_SET(#{marketId},market_ids) </if>
+		  		  <if test="advertisementId != null and advertisementId != ''"> and id in(SELECT product_id FROM ad_product_advertisement pa WHERE pa.advertisement_id=#{advertisementId}) </if>
+		  		  <if test="partnershipId != null and partnershipId != ''">and id in(SELECT product_id FROM ad_product_advertisement pa,ad_advertisement ad WHERE pa.advertisement_id=ad.id AND ad.partnership_id=#{partnershipId}) </if>
+		  		  <if test="remarks != null and remarks != ''"> and remarks = #{remarks} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.qh.ad.domain.ProductDO"  useGeneratedKeys="true" keyProperty="id">
+		insert into ad_product
+		(
+			`name`, 
+			`market_ids`, 
+			`remarks`, 
+			`create_time`,
+			 push_switch
+		)
+		values
+		(
+			#{name}, 
+			#{marketIds}, 
+			#{remarks}, 
+			SYSDATE(),
+			#{pushSwitch}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.qh.ad.domain.ProductDO">
+		update ad_product 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="marketIds != null">`market_ids` = #{marketIds}, </if>
+			<if test="remarks != null">`remarks` = #{remarks}, </if>
+			<if test="pushSwitch != null">`push_switch` = #{pushSwitch}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ad_product where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ad_product where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

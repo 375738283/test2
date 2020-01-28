@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qh.ad.dao.ProductAdvertisementDao">
+
+	<select id="get" resultType="com.qh.ad.domain.ProductAdvertisementDO">
+		select `id`,`product_id`,`advertisement_id`,`seq` from ad_product_advertisement where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.qh.ad.domain.ProductAdvertisementDO">
+		select `id`,`product_id`,`advertisement_id`,`seq` from ad_product_advertisement
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="productId != null and productId != ''"> and product_id = #{productId} </if>
+		  		  <if test="advertisementId != null and advertisementId != ''"> and advertisement_id = #{advertisementId} </if>
+		  		  <if test="seq != null and seq != ''"> and seq = #{seq} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ad_product_advertisement
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="productId != null and productId != ''"> and product_id = #{productId} </if>
+		  		  <if test="advertisementId != null and advertisementId != ''"> and advertisement_id = #{advertisementId} </if>
+		  		  <if test="seq != null and seq != ''"> and seq = #{seq} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.qh.ad.domain.ProductAdvertisementDO" useGeneratedKeys="true" keyProperty="id">
+		insert into ad_product_advertisement
+		(
+			`product_id`, 
+			`advertisement_id`, 
+			`seq`
+		)
+		values
+		(
+			#{productId}, 
+			#{advertisementId}, 
+			#{seq}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.qh.ad.domain.ProductAdvertisementDO">
+		update ad_product_advertisement 
+		<set>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="advertisementId != null">`advertisement_id` = #{advertisementId}, </if>
+			<if test="seq != null">`seq` = #{seq}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ad_product_advertisement where id = #{value}
+	</delete>
+	
+	
+	<delete id="removeByProductId">
+		delete from ad_product_advertisement where product_id = #{value}
+	</delete>
+	
+	<delete id="removeByAdvertisementId">
+		delete from ad_product_advertisement where advertisement_id = #{value}
+	</delete>
+	
+	
+	<delete id="batchRemove">
+		delete from ad_product_advertisement where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

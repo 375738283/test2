@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qh.ad.dao.ProductDownloadDao">
+
+	<select id="get" resultType="com.qh.ad.domain.ProductDownloadDO">
+		select `id`,`product_id`,`market_id`,`ip`,`phone`,`create_time`,device_name from ad_product_download where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.qh.ad.domain.ProductDownloadDO">
+		select `id`,`product_id`,`market_id`,`ip`,`phone`,`create_time`,device_name from ad_product_download
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="productId != null and productId != ''"> and product_id = #{productId} </if>
+		  		  <if test="marketId != null and marketId != ''"> and market_id = #{marketId} </if>
+		  		  <if test="ip != null and ip != ''"> and ip = #{ip} </if>
+		  		  <if test="phone != null and phone != ''"> and phone = #{phone} </if>
+		  		  <if test="beginDate != null and beginDate != ''"> and create_time <![CDATA[>=]]> #{beginDate} </if>
+				  <if test="endDate != null and endDate != ''">  and create_time <![CDATA[<=]]> #{endDate} </if>
+				  <if test="deviceName != null and deviceName != ''"> and device_name = #{deviceName} </if>
+				  
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ad_product_download
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="productId != null and productId != ''"> and product_id = #{productId} </if>
+		  		  <if test="marketId != null and marketId != ''"> and market_id = #{marketId} </if>
+		  		  <if test="ip != null and ip != ''"> and ip = #{ip} </if>
+		  		  <if test="phone != null and phone != ''"> and phone = #{phone} </if>
+		  		  <if test="beginDate != null and beginDate != ''"> and create_time <![CDATA[>=]]> #{beginDate} </if>
+				  <if test="endDate != null and endDate != ''">  and create_time <![CDATA[<=]]> #{endDate} </if>
+				  <if test="deviceName != null and deviceName != ''"> and device_name = #{deviceName} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.qh.ad.domain.ProductDownloadDO">
+		insert into ad_product_download
+		(
+			`product_id`, 
+			`market_id`, 
+			`ip`, 
+			`phone`, 
+			`create_time`,
+			device_name
+		)
+		values
+		(
+			#{productId}, 
+			#{marketId}, 
+			#{ip}, 
+			#{phone}, 
+			SYSDATE(),
+			#{deviceName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.qh.ad.domain.ProductDownloadDO">
+		update ad_product_download 
+		<set>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="marketId != null">`market_id` = #{marketId}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="phone != null">`phone` = #{phone}</if>
+			<if test="deviceName != null">`device_name` = #{deviceName}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ad_product_download where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ad_product_download where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

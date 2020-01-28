@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qh.im.dao.AppUserDao">
+
+	<select id="get" resultType="com.qh.im.domain.AppUserDO">
+		select `id`,`mobile`,`nike_name`,`password`,`qq`,`we_chat`,`sex`,`status`,`auth_status`,`token`,`city`,`constellation`,`x`,`y`,`height`,`weight`,`vip`,`create_time` from im_app_user where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.qh.im.domain.AppUserDO">
+		select `id`,`mobile`,`nike_name`,`password`,`qq`,`we_chat`,`sex`,`status`,`auth_status`,`token`,`city`,`constellation`,`x`,`y`,`height`,`weight`,`vip`,`create_time` from im_app_user
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="mobile != null and mobile != ''"> and mobile = #{mobile} </if>
+		  		  <if test="nikeName != null and nikeName != ''"> and nike_name = #{nikeName} </if>
+		  		  <if test="password != null and password != ''"> and password = #{password} </if>
+		  		  <if test="qq != null and qq != ''"> and qq = #{qq} </if>
+		  		  <if test="weChat != null and weChat != ''"> and we_chat = #{weChat} </if>
+		  		  <if test="sex != null and sex != ''"> and sex = #{sex} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="authStatus != null and authStatus != ''"> and auth_status = #{authStatus} </if>
+		  		  <if test="token != null and token != ''"> and token = #{token} </if>
+		  		  <if test="city != null and city != ''"> and city = #{city} </if>
+		  		  <if test="constellation != null and constellation != ''"> and constellation = #{constellation} </if>
+		  		  <if test="x != null and x != ''"> and x = #{x} </if>
+		  		  <if test="y != null and y != ''"> and y = #{y} </if>
+		  		  <if test="height != null and height != ''"> and height = #{height} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  <if test="vip != null and vip != ''"> and vip = #{vip} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from im_app_user
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="mobile != null and mobile != ''"> and mobile = #{mobile} </if>
+		  		  <if test="nikeName != null and nikeName != ''"> and nike_name = #{nikeName} </if>
+		  		  <if test="password != null and password != ''"> and password = #{password} </if>
+		  		  <if test="qq != null and qq != ''"> and qq = #{qq} </if>
+		  		  <if test="weChat != null and weChat != ''"> and we_chat = #{weChat} </if>
+		  		  <if test="sex != null and sex != ''"> and sex = #{sex} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="authStatus != null and authStatus != ''"> and auth_status = #{authStatus} </if>
+		  		  <if test="token != null and token != ''"> and token = #{token} </if>
+		  		  <if test="city != null and city != ''"> and city = #{city} </if>
+		  		  <if test="constellation != null and constellation != ''"> and constellation = #{constellation} </if>
+		  		  <if test="x != null and x != ''"> and x = #{x} </if>
+		  		  <if test="y != null and y != ''"> and y = #{y} </if>
+		  		  <if test="height != null and height != ''"> and height = #{height} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  <if test="vip != null and vip != ''"> and vip = #{vip} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.qh.im.domain.AppUserDO" useGeneratedKeys="true" keyProperty="id">
+		insert into im_app_user
+		(
+			`mobile`, 
+			`nike_name`, 
+			`password`, 
+			`qq`, 
+			`we_chat`, 
+			`sex`, 
+			`status`, 
+			`auth_status`, 
+			`token`, 
+			`city`, 
+			`constellation`, 
+			`x`, 
+			`y`, 
+			`height`, 
+			`weight`, 
+			`vip`, 
+			`create_time`
+		)
+		values
+		(
+			#{mobile}, 
+			#{nikeName}, 
+			#{password}, 
+			#{qq}, 
+			#{weChat}, 
+			#{sex}, 
+			#{status}, 
+			#{authStatus}, 
+			#{token}, 
+			#{city}, 
+			#{constellation}, 
+			#{x}, 
+			#{y}, 
+			#{height}, 
+			#{weight}, 
+			#{vip}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.qh.im.domain.AppUserDO">
+		update im_app_user 
+		<set>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="nikeName != null">`nike_name` = #{nikeName}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="qq != null">`qq` = #{qq}, </if>
+			<if test="weChat != null">`we_chat` = #{weChat}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="authStatus != null">`auth_status` = #{authStatus}, </if>
+			<if test="token != null">`token` = #{token}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="constellation != null">`constellation` = #{constellation}, </if>
+			<if test="x != null">`x` = #{x}, </if>
+			<if test="y != null">`y` = #{y}, </if>
+			<if test="height != null">`height` = #{height}, </if>
+			<if test="weight != null">`weight` = #{weight}, </if>
+			<if test="vip != null">`vip` = #{vip}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from im_app_user where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from im_app_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
